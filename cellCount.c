@@ -19,6 +19,7 @@ Course Section: Software Tools 2031
 */
 
 #include<stdio.h>
+#include <stdbool.h> 
 #include<stdlib.h>
 #define IMAGE_SIZE 10
 
@@ -61,54 +62,45 @@ for (int i=0; i<IMAGE_SIZE; i++)
  * (i.e. unique number)
  **/
 
+//offset to check surrounding 8 elements
+int offsets[3] = {-1, 0, 1};
 
-    int count = 3; 
+//checks if 8 surrounding neighbours are in range, and not visited
+int checkForNeighbours(int image[][IMAGE_SIZE], int i, int j, int visited[][IMAGE_SIZE]){
 
-int checkForNeighbours(int image[][IMAGE_SIZE], int i, int j){
-      if ((i >= 0) && (i < IMAGE_SIZE) && (j >= 0) && (j < IMAGE_SIZE))
-	        {
-	            if (image[i][j] == 1)
-	            {
-                    
-	                return 1;
-	            }
-                return 0;
-}
+if( (i >= 0) && (i < IMAGE_SIZE) && (j >= 0) && (j < IMAGE_SIZE) && (image[i][j] && (visited[i][j] == 0)) ){
+    return 1;
+} 
+return 0;
 }
 
 void searchNeighbours(int image[][IMAGE_SIZE], int i, int j, int visited[][IMAGE_SIZE], int count){
-
-    
-    
+  
      if (visited[i][j] == 0){
         visited[i][j] = 1;
      }
-
+image[i][j] = count;
     
-      
-
-    int offsets[3] = {-1, 0, +1};
       int xOffset, yOffset;
-      for (int l = 0; l < 3; ++l){
-	            xOffset = offsets[l];
-	            for (int m = 0; m < 3; ++m)
-	            {
+      for (int l = 0; l < 4; ++l){
+	        xOffset = offsets[l];
+	        for (int m = 0; m < 4; ++m){
 	                yOffset = offsets[m];
-                }
-            }
-            if (xOffset == 0 && yOffset == 0){
 
-            if (checkForNeighbours(image, i + xOffset, j + yOffset) == 1){
-	                    searchNeighbours(image, i + xOffset, j + yOffset, visited, count);
-	        }
+                         if (xOffset == 0 && yOffset == 0){
+                        continue;
+                         } else if (checkForNeighbours(image, i + xOffset, j + yOffset, visited) == 1 ){
+                             
+                        searchNeighbours(image, i + xOffset, j + yOffset, visited, count);
+                        
+                        }
+             }
         }
-    
-
 }
+
 void color(int image[IMAGE_SIZE][IMAGE_SIZE]){
 
-
-
+//matrix which keeps track of visited elements
 int visited[IMAGE_SIZE][IMAGE_SIZE]={{0,0,0,0,0,0,0,0,0,0},\
 		               {0,0,0,0,0,0,0,0,0,0},\
 		               {0,0,0,0,0,0,0,0,0,0},\
@@ -119,20 +111,19 @@ int visited[IMAGE_SIZE][IMAGE_SIZE]={{0,0,0,0,0,0,0,0,0,0},\
 		               {0,0,0,0,0,0,0,0,0,0},\
 		               {0,0,0,0,0,0,0,0,0,0},
 		               {0,0,0,0,0,0,0,0,0,0}};
-
+int count = 0;
  for (int i=0; i<IMAGE_SIZE; i++)
     {
         for (int j=0; j<IMAGE_SIZE; j++){
-        if (image[i][j] == 1 && visited[i][j] == 0)       
-
-        image[i][j] = count;
-        ++count;
+       
+        if (image[i][j] == 1 && visited[i][j] == 0){
+        
+        ++count; 
+        
         searchNeighbours(image, i, j, visited, count);
-         
         
-        
-        
-        }
+        }   
+    }
     }
 
 }
@@ -154,10 +145,42 @@ int colorRecursively(int image[IMAGE_SIZE][IMAGE_SIZE], int currentRow, int curr
  
 }
 void colorPtr(int* image){
-    // insert your code for task 2.2 here
+    
+
+int visited[IMAGE_SIZE][IMAGE_SIZE]={{0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},
+		               {0,0,0,0,0,0,0,0,0,0}};
+int count = 0;
+
+ for (int i=0; i<IMAGE_SIZE; i++)
+    {
+        for (int j=0; j<IMAGE_SIZE; j++){
+       
+        if (*(image+ (i * IMAGE_SIZE) + j) == 1 && visited[i][j] == 0){
+        
+        ++count; 
+        
+        searchNeighbours(image, i, j, visited, count);
+        
+        }
+        
+        
+        
+        }
+    }
+
 
 }
- 
+
+
+
 
 #ifndef __testing
 int main(){
