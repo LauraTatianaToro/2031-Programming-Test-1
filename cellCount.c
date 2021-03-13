@@ -31,7 +31,7 @@ void printImgArray(int array[IMAGE_SIZE][IMAGE_SIZE])
     for (int i=0; i<IMAGE_SIZE; i++)
     {
     for (int j=0; j<IMAGE_SIZE; j++)
-        printf("%02d, ",array[i][j]);
+        printf("%2d, ",array[i][j]);
     printf("\n");
     }
     printf("-----------------------------\n");
@@ -61,23 +61,33 @@ for (int i=0; i<IMAGE_SIZE; i++)
  * (i.e. unique number)
  **/
 
-static int[] offsets = {-1, 0, +1};
 
-void checkForNeighbours(int matrix[IMAGE_SIZE][IMAGE_SIZE], int i, int j){
+    int count = 3; 
+
+int checkForNeighbours(int image[][IMAGE_SIZE], int i, int j){
       if ((i >= 0) && (i < IMAGE_SIZE) && (j >= 0) && (j < IMAGE_SIZE))
 	        {
-	            if (matrix[i][j] == 1)
+	            if (image[i][j] == 1)
 	            {
+                    
 	                return 1;
 	            }
                 return 0;
 }
+}
 
-void search(int matrix[IMAGE_SIZE][IMAGE_SIZE], int i, int j, int visited[IMAGE_SIZE][IMAGE_SIZE]){
-     if (visited[i][j] = '0'){
-        visited[i][j] = count;
+void searchNeighbours(int image[][IMAGE_SIZE], int i, int j, int visited[][IMAGE_SIZE], int count){
+
+    
+    
+     if (visited[i][j] == 0){
+        visited[i][j] = 1;
      }
 
+    
+      
+
+    int offsets[3] = {-1, 0, +1};
       int xOffset, yOffset;
       for (int l = 0; l < 3; ++l){
 	            xOffset = offsets[l];
@@ -87,38 +97,44 @@ void search(int matrix[IMAGE_SIZE][IMAGE_SIZE], int i, int j, int visited[IMAGE_
                 }
             }
             if (xOffset == 0 && yOffset == 0){
-                continue;
-            }
+
             if (checkForNeighbours(image, i + xOffset, j + yOffset) == 1){
-	                    search(image, i + xOffset, j + yOffset, visited);
+	                    searchNeighbours(image, i + xOffset, j + yOffset, visited, count);
 	        }
         }
+    
 
 }
 void color(int image[IMAGE_SIZE][IMAGE_SIZE]){
-    int count = o;
-    char visited[IMAGE_SIZE][IMAGE_SIZE];
 
-    //initialize an array to show which elements have been visited. first set to f and then t
-    //when element in matrix is visited.
 
-    for (int i=0; i<IMAGE_SIZE; i++)
-    {
-        for (int j=0; j<IMAGE_SIZE; j++)
-        visited[i][j] = '0';
-    }
 
-//iterate through array checking for 1s, and set visited to t
+int visited[IMAGE_SIZE][IMAGE_SIZE]={{0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},\
+		               {0,0,0,0,0,0,0,0,0,0},
+		               {0,0,0,0,0,0,0,0,0,0}};
+
  for (int i=0; i<IMAGE_SIZE; i++)
     {
         for (int j=0; j<IMAGE_SIZE; j++){
-        if (array[i][j] = 1 && visited[i][j] = 'f')
+        if (image[i][j] == 1 && visited[i][j] == 0)       
+
+        image[i][j] = count;
         ++count;
-      
-        search(image[i][j], i, j, visited[i][j]);
+        searchNeighbours(image, i, j, visited, count);
+         
+        
+        
+        
         }
     }
-    return visited;
+
 }
 
 /**
@@ -204,4 +220,6 @@ int main(){
     printf("Total number of cells in the image: %d\n",count);
     return 0;
 }
+
+
 #endif
